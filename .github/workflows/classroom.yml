@@ -1,0 +1,117 @@
+name: Autograding Tests
+'on':
+- workflow_dispatch
+- repository_dispatch
+permissions:
+  checks: write
+  actions: read
+  contents: read
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: x02&#45;01
+      id: x02-45-01
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: x02&#45;01
+        setup-command: make compile
+        command: make -s test
+        input: |
+          Ucok
+          Wayan
+          ---
+        expected-output: |
+          Ucok
+          Wayan
+        comparison-method: exact
+        timeout: 1
+        max-score: 20
+    - name: x02&#45;02
+      id: x02-45-02
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: x02&#45;02
+        setup-command: make compile
+        command: make -s test
+        input: |
+          Butet
+          Lilis
+          Nana
+          Yuli
+        expected-output: |
+          Butet
+          Lilis
+          Nana
+          Yuli
+        comparison-method: exact
+        timeout: 1
+        max-score: 20
+    - name: x02&#45;03
+      id: x02-45-03
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: x02&#45;03
+        setup-command: make compile
+        command: make -s test
+        input: |
+          Butet
+          Lilis
+          Yuli
+          ---
+        expected-output: |
+          Butet
+          Lilis
+          Yuli
+        comparison-method: exact
+        timeout: 1
+        max-score: 20
+    - name: x02&#45;04
+      id: x02-45-04
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: x02&#45;04
+        setup-command: make compile
+        command: make -s test
+        input: |
+          Ucok
+          ---
+        expected-output: 'Ucok
+
+          '
+        comparison-method: exact
+        timeout: 1
+        max-score: 20
+    - name: x02&#45;05
+      id: x02-45-05
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: x02&#45;05
+        setup-command: make compile
+        command: make -s test
+        input: |
+          Ucok
+          Wayan
+          Budi
+          Wayan
+        expected-output: |
+          Ucok
+          Wayan
+          Budi
+          Wayan
+        comparison-method: exact
+        timeout: 1
+        max-score: 20
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      env:
+        X02-45-01_RESULTS: "${{steps.x02-45-01.outputs.result}}"
+        X02-45-02_RESULTS: "${{steps.x02-45-02.outputs.result}}"
+        X02-45-03_RESULTS: "${{steps.x02-45-03.outputs.result}}"
+        X02-45-04_RESULTS: "${{steps.x02-45-04.outputs.result}}"
+        X02-45-05_RESULTS: "${{steps.x02-45-05.outputs.result}}"
+      with:
+        runners: x02-45-01,x02-45-02,x02-45-03,x02-45-04,x02-45-05
